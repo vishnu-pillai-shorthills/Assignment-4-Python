@@ -14,3 +14,12 @@ data_extractor/file_loaders/__pycache__/
 data_extractor/storage/__pycache__/
 
 data_extractor/tests/__pycache__/
+
+test_output/
+
+test_output_invalid/
+
+extracted_data/
+
+/home/shtlp_0068/Documents/Assignment_4_python-main/data_extractor/info_extractor/__pycache__
+

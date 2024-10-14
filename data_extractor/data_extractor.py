@@ -1,12 +1,20 @@
 import re
+from typing import Any, Dict, List
 import fitz
 import pdfplumber
 from PyPDF2 import PdfReader
+
+from data_extractor.file_loaders.docx_loader import DOCXLoader
+from data_extractor.file_loaders.pdf_loader import PDFLoader
+from data_extractor.file_loaders.ppt_loader import PPTLoader
 
 class DataExtractor:
     def __init__(self, loader):
         self.loader = loader
         self.file_path = loader.file_path
+        # self.file = self.loader.load_file(file_path)
+        # self.file_path = file_path 
+        # self.file=None
 
     def extract_text(self):
         """
@@ -28,9 +36,11 @@ class DataExtractor:
         if self.file_path.endswith('.pdf'):
             # Extract text from PDF
             reader = self.loader.load_file()
+            # print(reader)
             text = ""
             for page in reader.pages:
                 text += page.extract_text()
+            print(text)
             return text
 
         elif self.file_path.endswith('.docx'):
@@ -149,69 +159,69 @@ class DataExtractor:
                         })
         return images
 
-    def extract_urls(self):
-        """
-        Extract URLs from the given file.
+    # def extract_urls(self):
+    #     """
+    #     Extract URLs from the given file.
 
-        URLs are extracted from PDF, DOCX, and PPTX files.
+    #     URLs are extracted from PDF, DOCX, and PPTX files.
 
-        Parameters
-        ----------
-        self : DataExtractor
-            The data extractor object.
+    #     Parameters
+    #     ----------
+    #     self : DataExtractor
+    #         The data extractor object.
 
-        Returns
-        -------
-        list
-            A list of URLs found in the file.
+    #     Returns
+    #     -------
+    #     list
+    #         A list of URLs found in the file.
 
-        Notes
-        -----
-        The URLs are extracted from text in the file using a regular expression.
-        For PDFs, the URLs are extracted from text in the PDF. For DOCX and PPTX,
-        the URLs are extracted from hyperlinks in the document.
-        """
-        urls = []
+    #     Notes
+    #     -----
+    #     The URLs are extracted from text in the file using a regular expression.
+    #     For PDFs, the URLs are extracted from text in the PDF. For DOCX and PPTX,
+    #     the URLs are extracted from hyperlinks in the document.
+    #     """
+    #     urls = []
 
-        if self.file_path.endswith('.pdf'):
-            # Use PdfReader instead of PdfFileReader
-            pdf_reader = PdfReader(self.file_path)
-            for page_number in range(len(pdf_reader.pages)):
-                page = pdf_reader.pages[page_number]
-                pdf_text = page.extract_text()  # Updated method to extract text
-                # Use regex to find URLs
-                regex = r"(https?://\S+)"
-                url = re.findall(regex, pdf_text)
-                urls += [x for x in url]  # Add found URLs to the list
+    #     if self.file_path.endswith('.pdf'):
+    #         # Use PdfReader instead of PdfFileReader
+    #         pdf_reader = PdfReader(self.file_path)
+    #         for page_number in range(len(pdf_reader.pages)):
+    #             page = pdf_reader.pages[page_number]
+    #             pdf_text = page.extract_text()  # Updated method to extract text
+    #             # Use regex to find URLs
+    #             regex = r"(https?://\S+)"
+    #             url = re.findall(regex, pdf_text)
+    #             urls += [x for x in url]  # Add found URLs to the list
 
-        elif self.file_path.endswith('.docx'):
-            # DOCX URL extraction using python-docx
-            doc = self.loader.load_file()
-            for paragraph in doc.paragraphs:
-                for run in paragraph.runs:
-                    # Check if the run has a hyperlink
-                    hyperlink = run.element.xpath(".//w:hyperlink")
-                    if hyperlink:
-                        for link in hyperlink:
-                            r_id = link.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
-                            # Get the actual URL from the relationship
-                            if r_id and r_id in doc.part.rels:
-                                url = doc.part.rels[r_id].target_ref
-                                urls.append(url)
+    #     elif self.file_path.endswith('.docx'):
+    #         # DOCX URL extraction using python-docx
+    #         doc = self.loader.load_file()
+    #         for paragraph in doc.paragraphs:
+    #             for run in paragraph.runs:
+    #                 # Check if the run has a hyperlink
+    #                 hyperlink = run.element.xpath(".//w:hyperlink")
+    #                 if hyperlink:
+    #                     for link in hyperlink:
+    #                         r_id = link.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
+    #                         # Get the actual URL from the relationship
+    #                         if r_id and r_id in doc.part.rels:
+    #                             url = doc.part.rels[r_id].target_ref
+    #                             urls.append(url)
 
-        elif self.file_path.endswith('.pptx'):
-            # PPTX URL extraction using python-pptx
-            ppt = self.loader.load_file()
-            for slide in ppt.slides:
-                for shape in slide.shapes:
-                    if shape.has_text_frame:
-                        for paragraph in shape.text_frame.paragraphs:
-                            for run in paragraph.runs:
-                                # Extract the hyperlink, if present
-                                hyperlink = run.hyperlink
-                                if hyperlink and hyperlink.address:
-                                    urls.append(hyperlink.address)
-        return urls
+    #     elif self.file_path.endswith('.pptx'):
+    #         # PPTX URL extraction using python-pptx
+    #         ppt = self.loader.load_file()
+    #         for slide in ppt.slides:
+    #             for shape in slide.shapes:
+    #                 if shape.has_text_frame:
+    #                     for paragraph in shape.text_frame.paragraphs:
+    #                         for run in paragraph.runs:
+    #                             # Extract the hyperlink, if present
+    #                             hyperlink = run.hyperlink
+    #                             if hyperlink and hyperlink.address:
+    #                                 urls.append(hyperlink.address)
+    #     return urls
 
         
     def extract_tables(self):
@@ -267,3 +277,70 @@ class DataExtractor:
 
         else:
             raise ValueError("Unsupported file format for table extraction.")
+
+
+    def extract_links(self) -> List[Dict[str, Any]]:
+        """
+        Extract hyperlinks from the file. Handles PDFs, PPTX, and DOCX files.
+        """
+        extracted_links = []
+        if isinstance(self.loader, PDFLoader):
+            extracted_links = self._extract_links_from_pdf()
+        elif isinstance(self.loader, DOCXLoader):
+            extracted_links = self._extract_links_from_docx()
+        elif isinstance(self.loader, PPTLoader):
+            extracted_links = self._extract_links_from_pptx()
+        return extracted_links
+
+    def _extract_links_from_pdf(self) -> List[Dict[str, Any]]:
+        """Extract hyperlinks from a PDF file."""
+        extracted_links = []
+        for page_num, page in enumerate(self.file.pages, start=1):
+            # Extract annotations from the page
+            if '/Annots' in page:
+                annotations = page['/Annots']
+                for annot in annotations:
+                    annot_obj = annot.get_object()  # Get the annotation object
+                    # Check if the annotation object has the expected structure
+                    if '/A' in annot_obj and '/URI' in annot_obj['/A']:
+                        link = annot_obj['/A']['/URI']
+                        extracted_links.append({
+                            "linked_text": link,  # You can also extract the text if needed
+                            "url": link,
+                            "page_number": page_num
+                        })
+        return extracted_links
+
+    def _extract_links_from_pptx(self) -> List[Dict[str, Any]]:
+        """Extract hyperlinks from a PPTX file."""
+        extracted_links = []
+        for slide_num, slide in enumerate(self.file.slides, start=1):
+            for shape in slide.shapes:
+                if hasattr(shape, "hyperlink") and shape.hyperlink.address:
+                    extracted_links.append({
+                        "linked_text": shape.text,
+                        "url": shape.hyperlink.address,
+                        "slide_number": slide_num
+                    })
+        return extracted_links
+
+    def _extract_links_from_docx(self) -> List[Dict[str, Any]]:
+        """Extract hyperlinks from a DOCX file."""
+        extracted_links = []
+        # Access the document's relationships to find hyperlinks
+        for rel in self.file.part.rels.values():
+            if "hyperlink" in rel.reltype:
+                # Extract the hyperlink target
+                hyperlink = rel.target_ref
+                
+                # Find the paragraph that contains this hyperlink
+                for para in self.file.paragraphs:
+                    for run in para.runs:
+                        if hyperlink in run._element.xml:
+                            linked_text = run.text
+                            extracted_links.append({
+                                "linked_text": linked_text,
+                                "url": hyperlink,
+                                "page_number": None  # DOCX does not have a concept of pages
+                            })
+        return extracted_links
