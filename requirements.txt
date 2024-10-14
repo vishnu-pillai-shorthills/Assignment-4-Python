@@ -1,0 +1,8 @@
+python-docx
+pyPDF2
+python-pptx
+pdfplumber
+fitz
+pymupdf
+pdfplumber
+pandas
