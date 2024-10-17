@@ -83,14 +83,28 @@ class SQLStorage(Storage):
         # Create the table if it doesn't exist, with an additional 'filename' column
         escaped_table_name = f'"{self.table_name}"'
 
-        self.cursor.execute(f"""CREATE TABLE IF NOT EXISTS {escaped_table_name} (
+        if(table_name == 'image'):
+            self.cursor.execute(f"""CREATE TABLE IF NOT EXISTS {escaped_table_name} (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             filename TEXT,
+            page_number INT,
             data TEXT
-        )""")
+            )""")
+        else:
+            self.cursor.execute(f"""CREATE TABLE IF NOT EXISTS {escaped_table_name} (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                filename TEXT,
+                data TEXT
+            )""")
 
         # Insert the filename and data into the table
-        self.cursor.execute(f"INSERT INTO {escaped_table_name} (filename, data) VALUES (?, ?)", (filename, str(data)))
+        if(table_name == 'image'):
+            # print(data)
+            for i in range(len(data)):
+                self.cursor.execute(f"INSERT INTO {escaped_table_name} (filename, page_number, data) VALUES (?, ?, ?)", (filename, data[i]['page'], str(data[i]['image_data'])))
+            # self.cursor.execute(f"INSERT INTO {escaped_table_name} (filename, page_number, data) VALUES (?, ?, ?)", (filename, data['page_number'], str(data['data'])))
+        else:
+            self.cursor.execute(f"INSERT INTO {escaped_table_name} (filename, data) VALUES (?, ?)", (filename, str(data)))
 
         # Commit the changes
         self.conn.commit()

@@ -98,7 +98,8 @@ def main():
     # Store the extracted images in the SQL database
 
     if images:
-        sql_storage.store("image", image_data, filename)
+        # sql_storage.store("image", image_data, filename)
+        sql_storage.store("image", images, filename)
 
     # Store the extracted URLs in the SQL database
     if urls:
