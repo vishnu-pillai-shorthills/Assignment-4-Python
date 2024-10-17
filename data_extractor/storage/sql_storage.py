@@ -1,13 +1,13 @@
 from data_extractor.storage.storage import Storage
 
 class SQLStorage(Storage):
-    def __init__(self):
+    def __init__(self, database):
         """
         Initializes a SQLStorage instance.
 
         This constructor calls the super class's constructor to set up the connection to the database.
         """
-        super().__init__()
+        super().__init__(database)
 
     # def store(self, table_name, data):
     #     # Sanitize the table_name variable

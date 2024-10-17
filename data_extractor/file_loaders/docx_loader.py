@@ -14,11 +14,31 @@ class DOCXLoader(FileLoader):
     #     return docx.Document(self.file_path)
     def validate_file(self, file_path: str) -> bool:
         return file_path.lower().endswith('.docx')
-
+    
     def load_file(self, file_path: str) -> docx.Document:
         if not self.validate_file(file_path):
-            raise ValueError("Invalid PDF file.")
-        return docx.Document(file_path)
+            raise ValueError("Invalid DOCX file.")
+        try:
+            # Attempt to open the DOCX file
+            return docx.Document(file_path)
+        except Exception:
+            # Catch any exception that occurs and raise a ValueError
+            raise ValueError("Invalid DOCX file.")
+    
+    # def is_docx_valid(self, file_path: str) -> bool:
+    #     try:
+    #         docx.Document(file_path)
+    #         return True
+    #     except Exception:
+    #         return False
+
+    # def load_file(self, file_path: str) -> docx.Document:
+    #     if not self.validate_file(file_path):
+    #         raise ValueError("Invalid DOCX file.")
+    #     if not self.is_docx_valid(file_path):
+    #         raise ValueError("Corrupted DOCX file.")
+    #     return docx.Document(file_path)
+    
     
     # def close_file(self):
     #     if self.file:

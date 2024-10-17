@@ -44,11 +44,38 @@ class PDFLoader(FileLoader):
     #         raise ValueError(f"Error loading PDF file: {e}")
     def validate_file(self, file_path: str) -> bool:
         return file_path.lower().endswith('.pdf')
-
+    
     def load_file(self, file_path: str) -> PdfReader:
         if not self.validate_file(file_path):
             raise ValueError("Invalid PDF file.")
-        return PdfReader(file_path)
+        
+        try:
+            # Attempt to open the PDF file
+            pdf = PdfReader(file_path)
+            # Check if the PDF is encrypted (password-protected)
+            if pdf.is_encrypted:
+                raise ValueError("Invalid PDF file.")
+            return pdf
+        except Exception:
+            # Catch any other exceptions and raise the expected ValueError
+            raise ValueError("Invalid PDF file.")
+
+    
+    # def is_pdf_valid(self, file_path: str) -> bool:
+    #     try:
+    #         with open(file_path, 'rb') as file:
+    #             PdfReader(file)
+    #             return True
+    #     except Exception:
+    #         return False
+ 
+
+    # def load_file(self, file_path: str) -> PdfReader:
+    #     if not self.validate_file(file_path):
+    #         raise ValueError("Invalid PDF file.")
+    #     if not self.is_pdf_valid(file_path):
+    #         raise ValueError("Corrupted PDF file.")
+    #     return PdfReader(file_path)
 
     # def close_file(self):
     #     """

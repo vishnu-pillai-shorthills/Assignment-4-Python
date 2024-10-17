@@ -17,13 +17,9 @@ def main():
     to extract content, and then saves the extracted data to a folder and a SQL database.
 
     """
-    file_path = "/home/shtlp_0068/Documents/Assignment_4_python-main/files/Networks.pptx"  # Change this to the file you want to process
-    # file_path = "/home/shtlp_0068/Documents/Assignment_4_python-main/files/demo.docx"  # Change this to the file you want to process
-    # file_path = "/home/shtlp_0068/Documents/Assignment_4_python-main/files/sample.pdf"  # Change this to the file you want to process
-    # file_path = "/home/shtlp_0068/Documents/Assignment_4_python-main/files/Vishnu resume (11).pdf"  # Change this to the file you want to process
-    # file_path = "/home/shtlp_0068/Documents/Assignment_4_python-main/files/Vishnu resume (11).pdf"  # Change this to the file you want to process
-    # file_path = "/home/shtlp_0068/Documents/Assignment_4_python-main/files/Document.docx"  # Change this to the file you want to process
-    # file_path = "/home/shtlp_0068/Documents/Assignment_4_python-main/files/Presentation.pptx"  # Change this to the file you want to process
+    
+    file_path=input("Enter file path: ")
+
 
     # Determine the file type and use the appropriate loader
     if file_path.endswith(".pdf"):
@@ -93,7 +89,7 @@ def main():
     print(f"Extracted data saved to: {output_dir}")
     
     # Create an instance of SQLStorage
-    sql_storage = SQLStorage()
+    sql_storage = SQLStorage("assignment4.db")
 
     # Store the extracted text in the SQL database
     sql_storage.store("text", extracted_text)
