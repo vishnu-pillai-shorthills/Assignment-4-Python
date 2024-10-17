@@ -19,7 +19,8 @@ def main():
     """
     
     file_path=input("Enter file path: ")
-
+    filename = os.path.basename(file_path)
+    # print(filename)
 
     # Determine the file type and use the appropriate loader
     if file_path.endswith(".pdf"):
@@ -92,21 +93,21 @@ def main():
     sql_storage = SQLStorage("assignment4.db")
 
     # Store the extracted text in the SQL database
-    sql_storage.store("text", extracted_text)
+    sql_storage.store("text", extracted_text, filename)
 
     # Store the extracted images in the SQL database
 
     if images:
-        sql_storage.store("image", image_data)
+        sql_storage.store("image", image_data, filename)
 
     # Store the extracted URLs in the SQL database
     if urls:
-        sql_storage.store("url", urls)
+        sql_storage.store("url", urls, filename)
 
     # Store the extracted tables in the SQL database
     if tables:
         for table in tables:
-            sql_storage.store("intoretable", table)
+            sql_storage.store("info_table", table, filename)
 
     print("Data stored in SQL database")
     sql_storage.close()

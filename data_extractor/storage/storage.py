@@ -15,3 +15,6 @@ class Storage(ABC):
     @abstractmethod
     def close(self):
         pass
+
+
+   
