@@ -51,19 +51,6 @@ class PPTXExtractor(Extractor):
                     })
         return images
 
-    # def extract_urls(self) -> List[Dict[str, Any]]:
-    #     """Extract hyperlinks from a PPTX file."""
-    #     extracted_links = []
-    #     for slide_num, slide in enumerate(self.file.slides, start=1):
-    #         for shape in slide.shapes:
-    #             if hasattr(shape, "hyperlink") and shape.hyperlink.address:
-    #                 extracted_links.append({
-    #                     "linked_text": shape.text,
-    #                     "url": shape.hyperlink.address,
-    #                     "slide_number": slide_num
-    #                 })
-    #     return extracted_links
-
     def extract_urls(self) -> List[Dict[str, Any]]:
         """Extract hyperlinks from a PPTX file."""
         extracted_links = []

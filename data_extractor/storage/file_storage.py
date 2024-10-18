@@ -30,7 +30,7 @@ class FileStorage(Storage):
             return self.save_images(data, filename)
         elif data_type == 'url':
             self.save_urls(data, filename)
-        elif data_type == 'table':
+        elif data_type == 'info_table':
             self.save_tables(data, filename)
         else:
             raise ValueError("Unsupported data type. Use 'text', 'image', 'url', or 'table'.")
