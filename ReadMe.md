@@ -6,9 +6,17 @@ The python version **3.12.3**, and rest packages versions are mentioned in **req
 ## Overview
 The `data_extractor` directory contains a collection of tools designed for extracting data from various file formats and for storing the resulting data efficiently.
 
+## Installation
+To begin, clone the repository with command file to install the packages used in the project.
+```bash
+https://github.com/vishnu-pillai-shorthills/Assignment-4-Python.git
+```
 
 ## How to Use
-To get started, clone the repository and input the `file_path` variable to the path of the main file. Then, execute the `main.py` script.
+After cloning the project, run the main.py file.
+```bash
+python main.py
+```
 
 ## Loaders
 The `data_extractor` directory includes the following loaders to facilitate data extraction from different file types:
@@ -34,7 +42,14 @@ The `data_extractor` offers the following features:
 - Provides a unified interface for easy access to the extracted data.
 
 ## How to see the database
-Run the command sqlite3 **<DATABASE_NAME>.db** in the terminal and see the tables made using .tables and retrieve the content from the table using **SELECT * FROM <TABLE_NAME>**.
+Run the command
+```bash
+sqlite3 <DATABASE_NAME>.db 
+``` 
+in the terminal and see the tables made using .tables and retrieve the content from the table using 
+```bash
+SELECT * FROM <TABLE_NAME>
+```
 
 ## Purpose
 The main goal of the `data_extractor` directory is to deliver a user-friendly and efficient method for extracting data from a variety of file formats and storing that data for subsequent analysis or processing.
