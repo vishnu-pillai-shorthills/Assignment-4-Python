@@ -13,10 +13,6 @@ class PDFExtractor(Extractor):
         """Load the file using the appropriate loader based on file type."""
         self.file = self.loader.load_file(file_path)
         self.file_path = file_path 
-        # print(self.file_path)
-        # print("----------------")
-        # print(self.file)
-        # print("----------------")
         
     def extract_text(self):
         # Extract text from PDF

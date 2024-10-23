@@ -1,18 +1,8 @@
 import pptx
 from data_extractor.file_loaders.file_loader import FileLoader
+from data_extractor.file_loaders.helper import Helper
 
 class PPTLoader(FileLoader):
-    def validate_file(self, file_path: str) -> bool:
-        return file_path.lower().endswith('.pptx')
-    
     def load_file(self, file_path: str) -> pptx.Presentation:
-        if not self.validate_file(file_path):
-            raise ValueError("Invalid PPT file.")
-        
-        try:
-            # Attempt to load the PPTX file
-            return pptx.Presentation(file_path)
-        except Exception:
-            # Catch any exception related to loading the file and raise the expected error
-            raise ValueError("Invalid PPT file.")
+         return Helper(file_path, pptx.Presentation).load()
 

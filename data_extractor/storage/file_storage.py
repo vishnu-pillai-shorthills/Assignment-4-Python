@@ -107,24 +107,6 @@ class FileStorage(Storage):
             json.dump(metadata, f, indent=4)
 
 
-    # def save_tables(self, tables, filename: str):
-    #     """Save extracted tables as CSV files."""
-    #     tables_dir = os.path.join(self.output_dir, "tables")
-    #     if not os.path.exists(tables_dir):
-    #         os.makedirs(tables_dir)
-
-    #     for idx, table in enumerate(tables):
-    #         csv_filename = f"table_{idx + 1}.csv"
-    #         csv_path = os.path.join(tables_dir, csv_filename)
-            
-    #         # Check if the table is a DataFrame (from PDF extraction)
-    #         if isinstance(table, pd.DataFrame):
-    #             table.to_csv(csv_path, index=False)
-    #         # Otherwise, treat it as a list (from DOCX or PPTX extraction)
-    #         elif isinstance(table, list):
-    #             with open(csv_path, 'w', newline='') as f:
-    #                 for row in table:
-    #                     f.write(",".join(row) + "\n")
 
 
     def save_tables(self, tables, filename: str):

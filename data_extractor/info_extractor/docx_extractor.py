@@ -51,26 +51,6 @@ class DOCXExtractor(Extractor):
         doc = None  # Explicitly close the document
         return images
     
-    # def extract_urls(self) -> List[Dict[str, Any]]:
-    #     """Extract hyperlinks from a DOCX file."""
-    #     extracted_links = []
-    #     # Access the document's relationships to find hyperlinks
-    #     for rel in self.file.part.rels.values():
-    #         if "hyperlink" in rel.reltype:
-    #             # Extract the hyperlink target
-    #             hyperlink = rel.target_ref
-                
-    #             # Find the paragraph that contains this hyperlink
-    #             for para in self.file.paragraphs:
-    #                 for run in para.runs:
-    #                     if hyperlink in run._element.xml:
-    #                         linked_text = run.text
-    #                         extracted_links.append({
-    #                             "linked_text": linked_text,
-    #                             "url": hyperlink,
-    #                             "page_number": None  # DOCX does not have a concept of pages
-    #                         })
-    #     return extracted_links
     
     def extract_urls(self) -> List[Dict[str, Any]]:
         """Extract hyperlinks from a DOCX file."""

@@ -18,20 +18,7 @@ class ExtractData():
                 extractor = iterator[it]
                 break
         else:    
-            raise ValueError("Unsupported file format. Use PDF, DOCX, or PPTX.")   
-        
-        # if file_path.endswith(".pdf"):
-        #     loader = PDFLoader()
-        #     extractor = PDFExtractor(loader)
-        # elif file_path.endswith(".docx"):
-        #     loader = DOCXLoader()
-        #     extractor = DOCXExtractor(loader)
-        # elif file_path.endswith(".pptx") or file_path.endswith(".ppt"):
-        #     loader = PPTLoader()
-        #     extractor = PPTXExtractor(loader)
-        # else:
-        #     raise ValueError("Unsupported file format. Use PDF, DOCX, or PPTX.") 
-        
+            raise ValueError("Unsupported file format. Use PDF, DOCX, or PPTX.")       
         # return the appropriate extractor
         return extractor
 
